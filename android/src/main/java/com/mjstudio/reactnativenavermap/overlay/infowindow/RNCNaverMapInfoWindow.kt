@@ -110,6 +110,11 @@ class RNCNaverMapInfoWindow(
     customAdapter?.let { overlay.adapter = it as InfoWindow.Adapter }
   }
 
+  fun setFontFamily(family: String?) {
+    customAdapter?.fontFamily = family
+    customAdapter?.let { overlay.adapter = it as InfoWindow.Adapter }
+  }
+
   fun setInfoWindowBackgroundColor(color: Int) {
     customAdapter?.backgroundColor = color
     customAdapter?.let { overlay.adapter = it as InfoWindow.Adapter }
@@ -147,6 +152,7 @@ class RNCNaverMapInfoWindow(
     var textSize: Float = 14f
     var textColor: Int = android.graphics.Color.BLACK
     var fontWeight: Int = 400
+    var fontFamily: String? = null
     var backgroundColor: Int = android.graphics.Color.WHITE
     var borderRadius: Float = 5f
     var borderWidth: Float = 1f
@@ -163,12 +169,48 @@ class RNCNaverMapInfoWindow(
         this.textSize = this@RNCNaverMapInfoWindowAdapter.textSize
         this.setTextColor(this@RNCNaverMapInfoWindowAdapter.textColor)
 
-        // Font weight
-        val typeface = when {
+        // Font family and weight
+        val fontFamilyName = this@RNCNaverMapInfoWindowAdapter.fontFamily
+        val typefaceStyle = when {
           this@RNCNaverMapInfoWindowAdapter.fontWeight >= 700 -> android.graphics.Typeface.BOLD
           else -> android.graphics.Typeface.NORMAL
         }
-        this.setTypeface(null, typeface)
+
+        if (fontFamilyName != null && fontFamilyName.isNotEmpty()) {
+          try {
+            // Try to load custom font from assets first
+            val fontPath = "fonts/$fontFamilyName.ttf"
+            val typeface = try {
+              android.graphics.Typeface.createFromAsset(context.assets, fontPath)
+            } catch (e: Exception) {
+              null
+            }
+
+            if (typeface != null) {
+              // Apply font weight style if needed
+              if (typefaceStyle != android.graphics.Typeface.NORMAL) {
+                this.setTypeface(typeface, typefaceStyle)
+              } else {
+                this.typeface = typeface
+              }
+            } else {
+              // Fallback: try system font by name
+              val systemTypeface = android.graphics.Typeface.create(fontFamilyName, typefaceStyle)
+              if (systemTypeface != null && systemTypeface != android.graphics.Typeface.DEFAULT) {
+                this.typeface = systemTypeface
+              } else {
+                // Final fallback to default font
+                this.setTypeface(null, typefaceStyle)
+              }
+            }
+          } catch (e: Exception) {
+            // Fallback to default if font not found
+            this.setTypeface(null, typefaceStyle)
+          }
+        } else {
+          // Use default font if fontFamily is not specified
+          this.setTypeface(null, typefaceStyle)
+        }
 
         // Gravity
         this.gravity = android.view.Gravity.CENTER

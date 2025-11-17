@@ -168,6 +168,14 @@ class RNCNaverMapInfoWindowManager : RNCNaverMapInfoWindowManagerSpec<RNCNaverMa
     view?.setFontWeight(value)
   }
 
+  @ReactProp(name = "fontFamily")
+  override fun setFontFamily(
+    view: RNCNaverMapInfoWindow?,
+    value: String?,
+  ) {
+    view?.setFontFamily(value)
+  }
+
   @ReactProp(name = "infoWindowBackgroundColor")
   override fun setInfoWindowBackgroundColor(
     view: RNCNaverMapInfoWindow?,

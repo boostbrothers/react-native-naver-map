@@ -18,6 +18,7 @@ using namespace facebook::react;
 @property(nonatomic, assign) CGFloat textSize;
 @property(nonatomic, strong) UIColor* textColor;
 @property(nonatomic, assign) NSInteger fontWeight;
+@property(nonatomic, strong) NSString* fontFamily;
 @property(nonatomic, strong) UIColor* backgroundColor;
 @property(nonatomic, assign) CGFloat borderRadius;
 @property(nonatomic, assign) CGFloat borderWidth;
@@ -34,6 +35,7 @@ using namespace facebook::react;
     _textSize = 14.0;
     _textColor = [UIColor blackColor];
     _fontWeight = 400;
+    _fontFamily = nil;
     _backgroundColor = [UIColor whiteColor];
     _borderRadius = 5.0;
     _borderWidth = 1.0;
@@ -98,6 +100,52 @@ using namespace facebook::react;
 - (UIFont*)createFont {
   CGFloat fontSize = _textSize;
 
+  // If fontFamily is not specified, use default system font
+  if (!_fontFamily || _fontFamily.length == 0) {
+    if (_fontWeight >= 700) {
+      return [UIFont boldSystemFontOfSize:fontSize];
+    } else if (_fontWeight >= 600) {
+      return [UIFont systemFontOfSize:fontSize weight:UIFontWeightSemibold];
+    } else if (_fontWeight >= 500) {
+      return [UIFont systemFontOfSize:fontSize weight:UIFontWeightMedium];
+    } else {
+      return [UIFont systemFontOfSize:fontSize weight:UIFontWeightRegular];
+    }
+  }
+
+  // Try to load custom font
+  NSString* fontFamilyName = _fontFamily;
+  UIFont* customFont = [UIFont fontWithName:fontFamilyName size:fontSize];
+  if (customFont) {
+    // Apply font weight if needed
+    UIFontDescriptor* fontDescriptor = [customFont fontDescriptor];
+    UIFontDescriptorSymbolicTraits traits = 0;
+
+    if (_fontWeight >= 700) {
+      traits = UIFontDescriptorTraitBold;
+    } else if (_fontWeight >= 600) {
+      // Try semibold variant
+      UIFont* semiboldFont =
+          [UIFont fontWithName:[fontFamilyName stringByAppendingString:@"-Semibold"] size:fontSize];
+      if (semiboldFont)
+        return semiboldFont;
+    } else if (_fontWeight >= 500) {
+      // Try medium variant
+      UIFont* mediumFont = [UIFont fontWithName:[fontFamilyName stringByAppendingString:@"-Medium"]
+                                           size:fontSize];
+      if (mediumFont)
+        return mediumFont;
+    }
+
+    if (traits != 0) {
+      fontDescriptor = [fontDescriptor fontDescriptorWithSymbolicTraits:traits];
+      customFont = [UIFont fontWithDescriptor:fontDescriptor size:fontSize];
+    }
+
+    return customFont;
+  }
+
+  // Fallback to system font if custom font not found
   if (_fontWeight >= 700) {
     return [UIFont boldSystemFontOfSize:fontSize];
   } else if (_fontWeight >= 600) {
@@ -255,6 +303,11 @@ using namespace facebook::react;
 
   if (prev.fontWeight != next.fontWeight) {
     _customDataSource.fontWeight = next.fontWeight;
+    needsRedraw = YES;
+  }
+
+  if (prev.fontFamily != next.fontFamily) {
+    _customDataSource.fontFamily = getNsStr(next.fontFamily);
     needsRedraw = YES;
   }
 

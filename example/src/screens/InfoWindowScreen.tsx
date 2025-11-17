@@ -90,6 +90,7 @@ export const InfoWindowScreen = ({ onBack }: { onBack: () => void }) => {
           longitude={126.4}
           text="📍 관광지"
           textSize={12}
+          fontFamily="Pretendard-Bold"
           textColor="#333"
           fontWeight="500"
           backgroundColor="#ffd93d"
