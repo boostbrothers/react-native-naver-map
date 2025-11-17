@@ -1,6 +1,6 @@
 {
-  "name": "@mj-studio/react-native-naver-map",
-  "version": "2.6.4",
+  "name": "@boostbrothers/react-native-naver-map",
+  "version": "2.6.5",
   "description": "Naver Map Component for React Native",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -61,16 +61,16 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mym0404/react-native-naver-map.git"
+    "url": "git+https://github.com/boostbrothers/react-native-naver-map.git"
   },
   "author": "MJ Studio <mym0404@gmail.com> (https://mjstudio.net)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mym0404/react-native-naver-map/issues"
+    "url": "https://github.com/boostbrothers/react-native-naver-map/issues"
   },
-  "homepage": "https://github.com/mym0404/react-native-naver-map#readme",
+  "homepage": "https://github.com/boostbrothers/react-native-naver-map#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://npm.pkg.github.com/"
   },
   "devDependencies": {
     "@babel/core": "catalog:",
