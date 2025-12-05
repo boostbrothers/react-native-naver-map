@@ -16,4 +16,5 @@ module.exports = {
       root: path.resolve(__dirname, '../node_modules/react-native-permissions'),
     },
   },
+  assets: ['./src/assets/fonts/'],
 };

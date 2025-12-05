@@ -92,6 +92,12 @@ export interface NaverMapInfoWindowProps
     | '900';
 
   /**
+   * 폰트 패밀리
+   * 지정하지 않으면 기본 폰트 사용
+   */
+  fontFamily?: string;
+
+  /**
    * 배경 색상
    * @default 'white'
    */
@@ -196,6 +202,7 @@ export const NaverMapInfoWindow = ({
   textSize = 14,
   textColor = 'black',
   fontWeight = 'normal',
+  fontFamily,
   backgroundColor = 'white',
   borderRadius = 5,
   borderWidth = 1,
@@ -231,6 +238,7 @@ export const NaverMapInfoWindow = ({
       textSize={textSize}
       textColor={processColor(textColor) as number}
       fontWeight={fontWeightValue}
+      fontFamily={fontFamily}
       infoWindowBackgroundColor={processColor(backgroundColor) as number}
       infoWindowBorderRadius={borderRadius}
       infoWindowBorderWidth={borderWidth}

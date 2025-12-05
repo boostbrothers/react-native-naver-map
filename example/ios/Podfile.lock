@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.80.0):
     - hermes-engine/Pre-built (= 0.80.0)
   - hermes-engine/Pre-built (0.80.0)
-  - mj-studio-react-native-naver-map (2.6.4):
+  - mj-studio-react-native-naver-map (2.6.5):
     - boost
     - DoubleConversion
     - fast_float
@@ -2492,7 +2492,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 7068e976238b29e97b3bafd09a994542af7d5c0b
-  mj-studio-react-native-naver-map: 4e15b3b3aee667b3e9807c08c64b554d56e52982
+  mj-studio-react-native-naver-map: 8d4b9f23a7d81bc40e24ebca158761e7e4dffccc
   NMapsGeometry: 4e02554fa9880ef02ed96b075dc84355d6352479
   NMapsMap: 1964e6f9073301ad3cbe3a12235ba36f6f6cd905
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669

@@ -88,6 +88,11 @@ interface Props extends BaseOverlay, ViewProps {
    */
   fontWeight?: WithDefault<Int32, 400>;
   /**
+   * 폰트 패밀리
+   * 지정하지 않으면 기본 폰트 사용
+   */
+  fontFamily?: string;
+  /**
    * 배경 색상
    */
   infoWindowBackgroundColor?: Int32;
