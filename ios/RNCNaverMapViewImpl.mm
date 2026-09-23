@@ -35,6 +35,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
   if (self = [super initWithFrame:frame]) {
     _reactSubviews = [NSMutableArray new];
+    _markerRegistry = [NSMutableDictionary new];
 
     [self.mapView addCameraDelegate:self];
     [self.mapView setTouchDelegate:self];
@@ -65,6 +66,7 @@
 
 - (void)dealloc {
   [_reactSubviews removeAllObjects];
+  [_markerRegistry removeAllObjects];
   [self callImageCancllers];
 }
 
@@ -82,8 +84,15 @@
   // Our desired API is to pass up markers/overlays as children to the mapview component.
   // This is where we intercept them and do the appropriate underlying mapview action.
   if ([subview isKindOfClass:[RNCNaverMapMarker class]]) {
-    auto marker = static_cast<RNCNaverMapMarker*>(subview).inner;
+    auto markerView = static_cast<RNCNaverMapMarker*>(subview);
+    auto marker = markerView.inner;
     marker.mapView = self.mapView;
+
+    // Register marker by identifier
+    NSString* identifier = marker.userInfo[@"identifier"];
+    if (identifier && identifier.length > 0) {
+      _markerRegistry[identifier] = markerView;
+    }
   } else if ([subview isKindOfClass:[RNCNaverMapCircle class]]) {
     auto marker = static_cast<RNCNaverMapCircle*>(subview).inner;
     marker.mapView = self.mapView;
@@ -108,6 +117,10 @@
       marker.overlayImage = NMF_MARKER_IMAGE_GREEN;
     }
     marker.mapView = self.mapView;
+  } else if ([subview isKindOfClass:[RNCNaverMapInfoWindow class]]) {
+    auto infoWindowView = static_cast<RNCNaverMapInfoWindow*>(subview);
+    [infoWindowView setCurrentMapView:self.mapView];
+    [infoWindowView setParentMapViewImpl:self];
   } else {
     NSArray<id<RCTComponent>>* childSubviews = [subview reactSubviews];
     for (int i = 0; i < childSubviews.count; i++) {
@@ -121,8 +134,16 @@
   // similarly, when the children are being removed we have to do the appropriate
   // underlying mapview action here.
   if ([subview isKindOfClass:[RNCNaverMapMarker class]]) {
-    auto marker = static_cast<RNCNaverMapMarker*>(subview).inner;
+    auto markerView = static_cast<RNCNaverMapMarker*>(subview);
+    auto marker = markerView.inner;
     [RNCNaverMapUtil closeInfoWindowsForMarker:marker];
+
+    // Unregister marker
+    NSString* identifier = marker.userInfo[@"identifier"];
+    if (identifier && identifier.length > 0) {
+      [_markerRegistry removeObjectForKey:identifier];
+    }
+
     marker.mapView = nil;
     marker.touchHandler = nil;
   } else if ([subview isKindOfClass:[RNCNaverMapCircle class]]) {
