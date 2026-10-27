@@ -21,6 +21,7 @@ import { ClusteringScreen } from './screens/ClusteringScreen';
 import { CommonScreen } from './screens/CommonScreen';
 import { GroundScreen } from './screens/GroundScreen';
 import { InfoWindowScreen } from './screens/InfoWindowScreen';
+import { StyledInfoWindowScreen } from './screens/StyledInfoWindowScreen';
 import { LocationOverlayScreen } from './screens/LocationOverlayScreen';
 import { MarkerScreen } from './screens/MarkerScreen';
 import { MultiPathScreen } from './screens/MultiPathScreen';
@@ -33,6 +34,7 @@ const SCREENS = [
   { id: 'camera', title: 'Camera Controls' },
   { id: 'marker', title: 'Marker Overlay' },
   { id: 'infowindow', title: 'Info Window' },
+  { id: 'styledInfoWindow', title: 'Styled Info Window (NaverMapInfoWindow)' },
   { id: 'circle', title: 'Circle Overlay' },
   { id: 'ground', title: 'Ground Overlay' },
   { id: 'path', title: 'Path Overlay' },
@@ -91,6 +93,8 @@ export default function App() {
         return <MarkerScreen onBack={handleBack} />;
       case 'infowindow':
         return <InfoWindowScreen onBack={handleBack} />;
+      case 'styledInfoWindow':
+        return <StyledInfoWindowScreen onBack={handleBack} />;
       case 'circle':
         return <CircleScreen onBack={handleBack} />;
       case 'ground':

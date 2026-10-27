@@ -35,6 +35,9 @@ class RNCNaverMapView(
   private var map: NaverMap? = null
   val overlays = mutableListOf<RNCNaverMapOverlay<*>>()
 
+  // Marker registry for InfoWindow lookup
+  val markerRegistry = mutableMapOf<String, RNCNaverMapMarker>()
+
   private val locationOverlayImageRenderer by lazy {
     RNCNaverMapTaggedImageRenderer(context)
   }
@@ -166,6 +169,13 @@ class RNCNaverMapView(
       is RNCNaverMapMarker -> {
         child.addToMap(map)
         overlays.add(index, child)
+
+        // Register marker by identifier
+        val identifier = child.overlay.tag as? String
+        if (identifier != null) {
+          markerRegistry[identifier] = child
+        }
+
         val visibility: Int = child.visibility
         child.visibility = INVISIBLE
         (child.parent as? ViewGroup)?.removeView(child)
@@ -175,6 +185,10 @@ class RNCNaverMapView(
       }
 
       is RNCNaverMapOverlay<*> -> {
+        // If it's an InfoWindow, pass mapView reference
+        if (child is com.mjstudio.reactnativenavermap.overlay.infowindow.RNCNaverMapInfoWindow) {
+          child.setParentMapView(this)
+        }
         child.addToMap(map)
         overlays.add(index, child)
       }
@@ -193,6 +207,7 @@ class RNCNaverMapView(
       }
     }
     overlays.clear()
+    markerRegistry.clear()
     map = null
     attacherGroup = null
     super.onDestroy()
@@ -202,6 +217,12 @@ class RNCNaverMapView(
     withMap { map ->
       when (val child = overlays.removeAt(index)) {
         is RNCNaverMapMarker -> {
+          // Unregister marker
+          val identifier = child.overlay.tag as? String
+          if (identifier != null) {
+            markerRegistry.remove(identifier)
+          }
+
           child.removeFromMap(map)
           attacherGroup?.removeView(child)
         }

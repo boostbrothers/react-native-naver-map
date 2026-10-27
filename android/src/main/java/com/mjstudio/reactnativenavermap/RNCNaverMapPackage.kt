@@ -12,6 +12,7 @@ import com.mjstudio.reactnativenavermap.module.RNCNaverMapUtilModule
 import com.mjstudio.reactnativenavermap.overlay.arrowheadpath.RNCNaverMapArrowheadPathManager
 import com.mjstudio.reactnativenavermap.overlay.circle.RNCNaverMapCircleManager
 import com.mjstudio.reactnativenavermap.overlay.ground.RNCNaverMapGroundManager
+import com.mjstudio.reactnativenavermap.overlay.infowindow.RNCNaverMapInfoWindowManager
 import com.mjstudio.reactnativenavermap.overlay.marker.RNCNaverMapMarkerManager
 import com.mjstudio.reactnativenavermap.overlay.multipath.RNCNaverMapMultiPathManager
 import com.mjstudio.reactnativenavermap.overlay.path.RNCNaverMapPathManager
@@ -32,6 +33,7 @@ class RNCNaverMapPackage : BaseReactPackage() {
       add(RNCNaverMapMultiPathManager())
       add(RNCNaverMapArrowheadPathManager())
       add(RNCNaverMapGroundManager())
+      add(RNCNaverMapInfoWindowManager())
     }
 
   override fun getModule(

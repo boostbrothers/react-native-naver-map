@@ -151,6 +151,11 @@ export interface NaverMapMarkerOverlayProps
     Coord,
     PropsWithChildren<{}> {
   /**
+   * 마커의 고유 식별자입니다.
+   * InfoWindow를 이 마커에 연결할 때 사용됩니다.
+   */
+  identifier?: string;
+  /**
    * 마커의 너비입니다.
    *
    * 지정하지 않는다면 너비 또는 높이가 이미지의 크기에 맞춰집니다.
@@ -341,6 +346,8 @@ export const NaverMapMarkerOverlay = forwardRef<
       isMinZoomInclusive,
       isMaxZoomInclusive,
 
+      identifier,
+
       width = Const.NULL_NUMBER,
       height = Const.NULL_NUMBER,
 
@@ -421,6 +428,7 @@ export const NaverMapMarkerOverlay = forwardRef<
     return (
       <NativeNaverMapMarker
         ref={innerRef}
+        identifier={identifier}
         coord={{ latitude, longitude }}
         zIndexValue={zIndex}
         globalZIndexValue={globalZIndex}
